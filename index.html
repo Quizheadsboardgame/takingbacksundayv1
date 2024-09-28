@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TAKING BACK SUNDAY</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif; /* Standard font */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: transparent; /* Fully transparent background */
+            color: black; /* Standard text color */
+            text-align: center;
+        }
+
+        #quiz-container {
+            background-color: transparent; /* Fully transparent container */
+            padding: 20px;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        #logo {
+            width: 150px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .question {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .answer {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            color: white; /* Change the answer color to white */
+        }
+
+        #next-button {
+            background-color: white; /* Change background color to white */
+            color: black; /* Change text color to black for visibility */
+            border: 2px solid #ff9900; /* Optional: Add a border for better visibility */
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease-in-out;
+        }
+
+        #next-button:hover {
+            background-color: #ffcc00; /* Change hover color for better effect */
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .fadeOut {
+            animation: fadeOut 0.5s forwards;
+        }
+
+        .fadeIn {
+            animation: fadeIn 0.5s forwards;
+        }
+    </style>
+</head>
+<body>
+
+<div id="quiz-container">
+    <img id="logo" src="https://i.imgur.com/cyZ0Z21.png" alt="George Michael Logo">
+    <h1>TAKING BACK SUNDAY</h1>
+    <div id="question-container">
+        <div class="question" id="question">Loading question...</div>
+        <div class="answer" id="answer">Loading answer...</div>
+        <button id="next-button" onclick="nextQuestion()">Next Question</button>
+    </div>
+</div>
+
+<script>
+    // Question and answers data
+    const quizData = [
+        { question: "When was Taking Back Sunday formed?", answer: "1999." },
+        { question: "In which city did Taking Back Sunday originate?", answer: "Long Island, New York." },
+        { question: "What was the title of Taking Back Sunday’s debut album?", answer: "Tell All Your Friends (2002)." },
+        { question: "Who was the original vocalist for Taking Back Sunday?", answer: "John Nolan." },
+        { question: "Which album features the hit song 'Cute Without the 'E' (Cut from the Team)'?", answer: "Tell All Your Friends." },
+        { question: "What is the name of the lead guitarist who joined Taking Back Sunday in 2001?", answer: "Eddie Reyes." },
+        { question: "What year did Taking Back Sunday release their album Louder Now?", answer: "2006." },
+        { question: "Which song from Louder Now reached the top of the Billboard Alternative Songs chart?", answer: "'MakeDamnSure.'" },
+        { question: "Who replaced John Nolan as guitarist after his departure from the band?", answer: "Fred Mascherino." },
+        { question: "What is the title of Taking Back Sunday’s second studio album?", answer: "Where You Want to Be (2004)." },
+        { question: "Which song contains the lyrics 'You’re so predictable'?", answer: "'You’re So Last Summer.'" },
+        { question: "What is the theme of many Taking Back Sunday songs?", answer: "Relationships and emotional struggles." },
+        { question: "What notable music festival did Taking Back Sunday perform at in 2004?", answer: "Warped Tour." },
+        { question: "In what year did Taking Back Sunday reunite with original members John Nolan and Shaun Cooper?", answer: "2010." },
+        { question: "Which album did Taking Back Sunday release in 2011?", answer: "Taking Back Sunday (self-titled)." },
+        { question: "What is the name of the song that features the lyric 'I just want to be with you'?", answer: "'Tidal Wave.'" },
+        { question: "Which music video features scenes of a beach and a carnival?", answer: "'Tidal Wave.'" },
+        { question: "Who is the lead vocalist of Taking Back Sunday?", answer: "Adam Lazzara." },
+        { question: "What is the title of the album that marked a departure in sound with a more mature approach?", answer: "Happiness Is (2014)." },
+        { question: "What is the title of the band’s first live album?", answer: "Live from Orensanz (2007)." },
+        { question: "Which Taking Back Sunday song features the lyric 'I’m sorry, I’m not the one'?", answer: "'Call Me in the Morning.'" },
+        { question: "What is the title of the band’s 2016 album?", answer: "Tidal Wave." },
+        { question: "Which band did Taking Back Sunday tour with in 2003?", answer: "My Chemical Romance." },
+        { question: "What instrument does Adam Lazzara often play during live performances?", answer: "He often uses a microphone on a long cord, swinging it around." },
+        { question: "What was the band’s first single?", answer: "'Cute Without the 'E' (Cut from the Team).'" },
+        { question: "What year did Taking Back Sunday sign with Warner Bros. Records?", answer: "2006." },
+        { question: "Which song features the line 'I’ll be the one to make you feel better'?", answer: "'A Decade Under the Influence.'" },
+        { question: "What is the name of the song that includes the lyrics 'I’m just a kid and life is a nightmare'?", answer: "'There’s No I in Team.'" },
+        { question: "Which album contains the song 'What’s It Feel Like to Be a Ghost?'", answer: "Where You Want to Be." },
+        { question: "Who produced the album Louder Now?", answer: "Eric Valentine." },
+        { question: "What is the title of the documentary released about the band's history?", answer: "Taking Back Sunday: 20 Years of TBS (2020)." },
+        { question: "Which song’s lyrics discuss the struggles of friendship and loyalty?", answer: "'This Photograph Is Proof (I Know You Know).'" },
+        { question: "What year did Taking Back Sunday release Happiness Is?", answer: "2014." },
+        { question: "What song includes the line 'We’ll be alright'?", answer: "'I’ll Let You Live.'" },
+        { question: "Which member of Taking Back Sunday is known for his distinctive haircut?", answer: "Adam Lazzara." },
+        { question: "What is the title of the band’s 2019 album?", answer: "The 20th Anniversary Tour Edition." },
+        { question: "What is a common element in Taking Back Sunday’s album art?", answer: "They often feature abstract or artistic designs." },
+        { question: "What song from Tidal Wave discusses personal growth?", answer: "'Tidal Wave.'" },
+        { question: "Which band member is responsible for the bass guitar?", answer: "Shaun Cooper." },
+        { question: "What year did Taking Back Sunday tour to support their album Taking Back Sunday?", answer: "2011." },
+        { question: "Which song features the lyric 'You’re the one I want'?", answer: "'You’re So Last Summer.'" },
+        { question: "What music video features a storyline involving a love triangle?", answer: "'Cute Without the 'E' (Cut from the Team).'" },
+        { question: "What does Adam Lazzara often do with his microphone during live shows?", answer: "He swings it around on a long cord." },
+        { question: "Which album features the song 'Great Romances of the 20th Century'?", answer: "Tell All Your Friends." },
+        { question: "What year was Where You Want to Be released?", answer: "2004." }
+    ];
+
+    let currentQuestionIndex = 0;
+
+    // Shuffle the questions
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+    }
+
+    shuffle(quizData);
+
+    // Load the current question and answer
+    function loadQuestion() {
+        const questionContainer = document.getElementById("question");
+        const answerContainer = document.getElementById("answer");
+
+        const currentQuestion = quizData[currentQuestionIndex];
+
+        questionContainer.classList.add("fadeOut");
+        answerContainer.classList.add("fadeOut");
+
+        setTimeout(() => {
+            questionContainer.innerText = currentQuestion.question;
+            answerContainer.innerText = currentQuestion.answer;
+
+            questionContainer.classList.remove("fadeOut");
+            questionContainer.classList.add("fadeIn");
+            answerContainer.classList.remove("fadeOut");
+            answerContainer.classList.add("fadeIn");
+        }, 500);
+    }
+
+    // Move to the next question
+    function nextQuestion() {
+        currentQuestionIndex++;
+        if (currentQuestionIndex < quizData.length) {
+            loadQuestion();
+        } else {
+            const questionContainer = document.getElementById("question");
+            const answerContainer = document.getElementById("answer");
+            questionContainer.innerText = "Quiz Completed!";
+            answerContainer.innerText = "";
+            document.getElementById("next-button").style.display = "none"; // Hide the next button
+        }
+    }
+
+    // Initial load
+    loadQuestion();
+</script>
+
+</body>
+</html>
